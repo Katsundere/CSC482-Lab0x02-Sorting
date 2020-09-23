@@ -48,15 +48,15 @@ public class Main {
         }
         return data;                                                                    // returns the sorted array to the main function
     }
-    public static String[] mergeSort(String data[], int low, int high){                                    //  Start of merge sort
-        int middle = (int) Math.ceil((high - low)/2) + low;
+    public static String[] mergeSort(String data[], int low, int high){                 //  Start of merge sort
+        int middle = (int) Math.ceil((high - low)/2) + low;                             // determines the midpoint between a high and low point given two values
         String[] sort = new String[high-low];
-        if(high - low >= 2) {
-            String[] left = mergeSort(data, low, middle);
-            String[] right = mergeSort(data, middle, high);
-            int l = 0;
+        if(high - low >= 2) {                                                           // Anything that is 2 or more will be sorted, otherwise ignored.
+            String[] left = mergeSort(data, low, middle);                               // populates the left side of the sort
+            String[] right = mergeSort(data, middle, high);                             // populates the right side of the sort
+            int l = 0;                                                                  // l and h are increment trackers for low and high
             int h = 0;
-            for (int i = 0; i < high - low; i++) {
+            for (int i = 0; i < high - low; i++) {                                      //for loop with if statements to determine where to add to array sort
                 if (l >= middle - low && h < high - middle) {
                     sort[i] = right[h];
                     h++;
@@ -73,8 +73,12 @@ public class Main {
             }
         }
         else {
-            sort[0] = data[low];
+            sort[0] = data[low];                                                        //If the array is less than 2 it will return the value that was passed back to main
         }
+        return sort;                                                                    // returns sort to main function
+    }
+    public static String[] quickSort(String[] data, int low, int high){
+
         return sort;
     }
 
