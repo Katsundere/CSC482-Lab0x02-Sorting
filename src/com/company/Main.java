@@ -2,15 +2,14 @@ package com.company;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
-import java.util.Arrays;
 import java.util.Random;
 
 public class Main {
-    private static int N = 10;          //The length of list to be sorted
+    private static int N = 100;          //The length of list to be sorted
     private static int k = 4;           // The size of the key-values(strings) to sort
     private static int d = 0;           // The size (in bytes or characters) of the digits used by the radix sort
-    private static int minV = 37;        // smallest value for char
-    private static int maxV = 255;      // Largest value for char
+    private static int minV = 97;       // smallest value for char
+    private static int maxV = 122;      // Largest value for char
 
     //Function to generate the test list
     public static String[] generateTestList(int N, int k, int minV, int maxV){
@@ -21,25 +20,41 @@ public class Main {
         for(int i = 0; i < N; i++){
             for(int j = 0; j < k; j++){
                 generateChar[j] = (char)(rnd.nextInt(maxV-minV) + minV);          // (char) converts to char with the Random function of type int for the char array
-                //System.out.println("Char: " + generateChar[j]);                         //testing output
             }
             generateChar[k] = '\0';                                                     // appends a null terminator to generateChar at position k in the array. (The end of the segment)
             generateList[i] = String.valueOf(generateChar);                             //puts the character segments into the string array at position i
-            //System.out.println("String: " + generateList[i]);                         // testing output
         }
         return generateList;
     }
-    public static void print(String data[]){                                                  // print function with some formatting.
+    public static void print(String data[]){                                            // print function with some formatting.
         System.out.print("{ ");
         for(int i = 0; i < N; i++) {
             System.out.print(data[i] + " , ");
         }
-        System.out.println("\b\b\b }");
+        System.out.println("\b\b\b }");                                                 // \b used to erase characters at the end I don't want printed out.
     }
-    public static void main(String[] args) {
-        String[] data = new String[N];
-        data = generateTestList(N, k, minV, maxV);
-        print(data);
+    public static String[] insertionSort(String data[], int N){                         // start of insertion sort.
+        String temp;
+
+        for(int i = 0; i < N; i++){                                                     //loops run until size N is reached
+            for(int j = i+1; j < N; j++){
+                if(data[i].compareToIgnoreCase(data[j])>0){                             // compares string i to string j and swaps them if j is less than i
+                    temp = data[i];                                                     // stores the string that is being swapped from i into temp
+                    data[i] = data[j];                                                  // Swaps j to i
+                    data[j] = temp;                                                     // puts temp into j
+                }
+            }
+        }
+        return data;
+    }
+
+    public static void main(String[] args) {                                            // Start of main function
+        String[] testList = new String[N];
+        String[] sortedList = new String[N];
+        testList = generateTestList(N, k, minV, maxV);
+        print(testList);
+        sortedList = insertionSort(testList, N);
+        print(sortedList);
 
     }
 
