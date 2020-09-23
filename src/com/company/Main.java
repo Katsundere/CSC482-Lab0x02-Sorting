@@ -6,7 +6,7 @@ import java.util.Random;
 
 
 public class Main {
-    private static int N = 3;          //The length of list to be sorted
+    private static int N = 5;          //The length of list to be sorted
     private static int k = 4;           // The size of the key-values(strings) to sort
     private static int d = 0;           // The size (in bytes or characters) of the digits used by the radix sort
     private static int minV = 97;       // smallest value for char
@@ -48,12 +48,12 @@ public class Main {
         }
         return data;                                                                    // returns the sorted array to the main function
     }
-    public static String[] mergeSort(String data[], int low, int high){                 //  Start of merge sort
+    public static String[] mergeSort(String data[], int low, int high){                 // Start of merge sort
         int middle = (int) Math.ceil((high - low)/2) + low;                             // determines the midpoint between a high and low point given two values
         String[] sort = new String[high-low];
         if(high - low >= 2) {                                                           // Anything that is 2 or more will be sorted, otherwise ignored.
-            String[] left = mergeSort(data, low, middle);                               // populates the left side of the sort
-            String[] right = mergeSort(data, middle, high);                             // populates the right side of the sort
+            String[] left = mergeSort(data, low, middle);                               // recursive call for the left side of the sort
+            String[] right = mergeSort(data, middle, high);                             // recursive call for the right side of the sort
             int l = 0;                                                                  // l and h are increment trackers for low and high
             int h = 0;
             for (int i = 0; i < high - low; i++) {                                      //for loop with if statements to determine where to add to array sort
@@ -77,9 +77,43 @@ public class Main {
         }
         return sort;                                                                    // returns sort to main function
     }
-    public static String[] quickSort(String[] data, int low, int high){
-
-        return sort;
+    public static String[] quickSort(String[] data, int low, int high){                 // Start of quick sort function
+        String pivot;
+        String temp;
+        boolean pivotPoint = false;
+        int l = low +1;
+        int h = high -1;
+        if(low >= high){                                                                // prevents sort from going out of bounds.
+            return data;
+        }
+        else{                                                                           // sets pivot to data indexed at low.
+            pivot = data[low];
+        }
+        if(high-low >=2){                                                               // if there are 2 or more strings to sort it will run
+            while(!pivotPoint){
+                while(l < high - 1 && data[l].compareTo(pivot) < 0){                    // iterates comparison of data[l] the pivot
+                    l++;
+                }
+                while(h > low && data[h].compareTo(pivot) > 0){                         // iterates comparison of data[h] and pivot
+                    h--;
+                }
+                if(l >= h){                                                             // sets pivotPoint to true if the values are equivalent
+                    pivotPoint = true;
+                }
+                else{                                                                   // swaps data[l] with data[h]
+                    temp = data[l];
+                    data[l] = data[h];
+                    data[h] = temp;
+                    l++;
+                    h--;
+                }
+            }
+            data[low] = data[h];                                                        // swaps data[l] for data[h] setting pivot to data[h]
+            data[h] = pivot;
+            quickSort(data, low, h);                                                    //recursive call passing low index and h index
+            quickSort(data, h+1, high);                                             //recursive call passing  h index + 1 and high index
+        }
+        return data;                                                                    // returns the sorted data array
     }
 
     public static void main(String[] args) {                                            // Start of main function
@@ -94,6 +128,11 @@ public class Main {
         testList = generateTestList();
         print(testList);
         sortedList = mergeSort(testList, 0, N);
+        print(sortedList);
+        System.out.println("Quick Sort");
+        testList = generateTestList();
+        print(testList);
+        sortedList = quickSort(testList, 0, N);
         print(sortedList);
 
     }
