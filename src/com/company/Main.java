@@ -2,6 +2,7 @@ package com.company;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
+import java.util.Arrays;
 import java.util.Random;
 
 public class Main {
@@ -20,20 +21,26 @@ public class Main {
         for(int i = 0; i < N; i++){
             for(int j = 0; j < k; j++){
                 generateChar[j] = (char)(rnd.nextInt(maxV-minV) + minV);          // (char) converts to char with the Random function of type int for the char array
-                System.out.println("Char: " + generateChar[j]);                         //testing output
+                //System.out.println("Char: " + generateChar[j]);                         //testing output
             }
             generateChar[k] = '\0';                                                     // appends a null terminator to generateChar at position k in the array. (The end of the segment)
             generateList[i] = String.valueOf(generateChar);                             //puts the character segments into the string array at position i
-            System.out.println("String: " + generateList[i]);                           // testing output
+            //System.out.println("String: " + generateList[i]);                         // testing output
         }
         return generateList;
+    }
+    public static void print(String data[]){                                                  // print function with some formatting.
+        System.out.print("{ ");
+        for(int i = 0; i < N; i++) {
+            System.out.print(data[i] + " , ");
+        }
+        System.out.println("\b\b\b }");
     }
     public static void main(String[] args) {
         String[] data = new String[N];
         data = generateTestList(N, k, minV, maxV);
-        for(int i = 0; i < N; i++) {
-            System.out.print(data[i]+" ");                                              // testing output
-        }
+        print(data);
+
     }
 
 
