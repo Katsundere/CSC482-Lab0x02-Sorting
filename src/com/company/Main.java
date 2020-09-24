@@ -141,11 +141,19 @@ public class Main {
          return data;
     }
     public static boolean isSorted(String[] data){                                          // start of isSorted function
+        String[] listSorted = new String[N];
+        System.out.println("Generating list of length " + N +", key width of " + k);
+        System.out.println("Sorting with Insertion Sort");
+        listSorted = insertionSort (data, N);
+        System.out.print("Verified: " );
         for (int i = 0; i < N-1; i++){
-            if(data[i].compareTo(data[i + 1]) > 0);                                     // compares the sorted String. if the value doesn't compare, it isn't sorted.
-            return false;
+            if(listSorted[i].compareTo(listSorted[i + 1]) > 0);                                     // compares the sorted String. if the value doesn't compare, it isn't sorted.
+            System.out.println("Sorted!");
+            return true;
         }
-        return true;
+        System.out.println("Not Sorted!");
+
+        return false;
     }
     public static void visualTesting(String[] testList){
         String[] sortedList = new String[N];
@@ -154,6 +162,7 @@ public class Main {
         print(testList);
         sortedList = insertionSort(tempList, N);
         print(sortedList);
+        isSorted(testList);
         System.out.println("Merge Sort");
         print(testList);
         tempList = testList.clone();
@@ -195,7 +204,7 @@ public class Main {
         System.out.printf("Insertion Sort\n");
         System.out.printf("| %5s| %10s| %15s| %10s| %15s| %10s| %15s| %10s| %15s|\n","","k=6","","k=12","","k=24","","k=48","");
         System.out.printf("| %5s| %10s| %15s| %10s| %15s| %10s| %15s| %10s| %15s|\n","N","Time","Doubling Ratio","Time","Doubling Ratio","Time","Doubling Ratio","Time","Doubling Ratio");
-
+        startTime = 0;
         for(changingN = 1; startTime < endTime; changingN = changingN *2){          // Timing for insertion Sort
             System.out.printf("| %5d|",changingN);
             prev=1;
@@ -220,13 +229,98 @@ public class Main {
             System.out.printf("\n");
         }
 
+        System.out.printf("Merge Sort\n");
+        System.out.printf("| %5s| %10s| %15s| %10s| %15s| %10s| %15s| %10s| %15s|\n","","k=6","","k=12","","k=24","","k=48","");
+        System.out.printf("| %5s| %10s| %15s| %10s| %15s| %10s| %15s| %10s| %15s|\n","N","Time","Doubling Ratio","Time","Doubling Ratio","Time","Doubling Ratio","Time","Doubling Ratio");
+        startTime = 0;
+        for(changingN = 1; startTime < endTime; changingN = changingN *2){          // Timing for insertion Sort
+            System.out.printf("| %5d|",changingN);
+            prev=1;
+            startTime = getCpuTime();
+            for(changingK = 6; changingK < 49; changingK = changingK * 2) {
+                totalTime = 0;
+                for (int i = 0; i < iterations; i++) {
+                    testList = generateTestList(changingN, changingK);
+                    timingStart = getCpuTime();
+                    mergeSort(testList,0, changingN);
+                    timingEnd = getCpuTime();
+                    totalTime = timingEnd - timingStart;
+                }
+
+                averageTime = totalTime / iterations;
+
+                System.out.printf(" %10d|", averageTime);
+                System.out.printf(" %15.2f|", averageTime/prev);
+                prev = averageTime;
+
+            }
+            System.out.printf("\n");
+        }
+
+        System.out.printf("Quick Sort\n");
+        System.out.printf("| %5s| %10s| %15s| %10s| %15s| %10s| %15s| %10s| %15s|\n","","k=6","","k=12","","k=24","","k=48","");
+        System.out.printf("| %5s| %10s| %15s| %10s| %15s| %10s| %15s| %10s| %15s|\n","N","Time","Doubling Ratio","Time","Doubling Ratio","Time","Doubling Ratio","Time","Doubling Ratio");
+        startTime = 0;
+        for(changingN = 1; startTime < endTime; changingN = changingN *2){          // Timing for insertion Sort
+            System.out.printf("| %5d|",changingN);
+            prev=1;
+            startTime = getCpuTime();
+            for(changingK = 6; changingK < 49; changingK = changingK * 2) {
+                totalTime = 0;
+                for (int i = 0; i < iterations; i++) {
+                    testList = generateTestList(changingN, changingK);
+                    timingStart = getCpuTime();
+                    quickSort(testList,0, changingN);
+                    timingEnd = getCpuTime();
+                    totalTime = timingEnd - timingStart;
+                }
+
+                averageTime = totalTime / iterations;
+
+                System.out.printf(" %10d|", averageTime);
+                System.out.printf(" %15.2f|", averageTime/prev);
+                prev = averageTime;
+
+            }
+            System.out.printf("\n");
+        }
+
+        System.out.printf("Radix Sort\n");
+        System.out.printf("| %5s| %10s| %15s| %10s| %15s| %10s| %15s| %10s| %15s|\n","","k=6","","k=12","","k=24","","k=48","");
+        System.out.printf("| %5s| %10s| %15s| %10s| %15s| %10s| %15s| %10s| %15s|\n","N","Time","Doubling Ratio","Time","Doubling Ratio","Time","Doubling Ratio","Time","Doubling Ratio");
+        startTime = 0;
+        for(changingN = 1; startTime < endTime; changingN = changingN *2){          // Timing for insertion Sort
+            System.out.printf("| %5d|",changingN);
+            prev=1;
+            startTime = getCpuTime();
+            for(changingK = 6; changingK < 49; changingK = changingK * 2) {
+                totalTime = 0;
+                for (int i = 0; i < iterations; i++) {
+                    testList = generateTestList(changingN, changingK);
+                    timingStart = getCpuTime();
+                    radixSort(testList, changingN);
+                    timingEnd = getCpuTime();
+                    totalTime = timingEnd - timingStart;
+                }
+
+                averageTime = totalTime / iterations;
+
+                System.out.printf(" %10d|", averageTime);
+                System.out.printf(" %15.2f|", averageTime/prev);
+                prev = averageTime;
+
+            }
+            System.out.printf("\n");
+        }
+
     }
 
     public static void main(String[] args) {                                            // Start of main function
         String[] testList = new String[N];
-        //testList = generateTestList(N,k);
+        testList = generateTestList(N,k);
         //visualTesting(testList);
         timePerformanceTesting();
+        //isSorted(testList);
     }
 
 
