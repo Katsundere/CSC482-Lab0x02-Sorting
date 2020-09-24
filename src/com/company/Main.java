@@ -1,16 +1,18 @@
 package com.company;
 
+import javax.naming.PartialResultException;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
 import java.util.Random;
+;
 
 
 public class Main {
     private static int N = 5;          //The length of list to be sorted
-    private static int k = 4;           // The size of the key-values(strings) to sort
-    private static int d = 0;           // The size (in bytes or characters) of the digits used by the radix sort
-    private static int minV = 97;       // smallest value for char
-    private static int maxV = 122;      // Largest value for char
+    private static int k = 4;          // The size of the key-values(strings) to sort
+    //private static int d = 32;         // The size (in bytes or characters) of the digits used by the radix sort
+    private static int minV = 97;      // smallest value for char
+    private static int maxV = 122;     // Largest value for char
 
     //Function to generate the test list
     public static String[] generateTestList(){
@@ -110,10 +112,33 @@ public class Main {
             }
             data[low] = data[h];                                                        // swaps data[l] for data[h] setting pivot to data[h]
             data[h] = pivot;
-            quickSort(data, low, h);                                                    //recursive call passing low index and h index
-            quickSort(data, h+1, high);                                             //recursive call passing  h index + 1 and high index
+            quickSort(data, low, h);                                                    // recursive call passing low index and h index
+            quickSort(data, h+1, high);                                             // recursive call passing  h index + 1 and high index
         }
         return data;                                                                    // returns the sorted data array
+    }
+
+    public static String[] radixSort(String[] data) {                                   // Start of radix sort referenced https://algs4.cs.princeton.edu/51radix/LSD.java.html
+        int R = 256;
+        String[] aux = new String[N];
+
+        for(int i = k-1; i >= 0; i--) {
+
+            int[] count = new int[R + 1];
+            for (int j = 0; j < N; j++) {                                                 // compute frequency counts
+                count[data[j].charAt(i) + 1]++;
+            }
+            for (int j = 0; j < R; j++) {                                                 // compute cumulates
+                count[j + 1] += count[j];
+            }
+            for (int j = 0; j < N; j++) {                                                 // moves data
+                aux[count[data[j].charAt(i)]++] = data[j];
+            }
+            for (int j = 0; j < N; j++) {                                                 // copies back
+                data[j] = aux[j];
+            }
+        }
+         return data;
     }
 
     public static void main(String[] args) {                                            // Start of main function
@@ -133,6 +158,11 @@ public class Main {
         testList = generateTestList();
         print(testList);
         sortedList = quickSort(testList, 0, N);
+        print(sortedList);
+        System.out.println("RadixSort");
+        testList = generateTestList();
+        print(testList);
+        sortedList = radixSort(testList);
         print(sortedList);
 
     }
