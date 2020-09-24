@@ -15,16 +15,16 @@ public class Main {
     private static int maxV = 122;     // Largest value for char
 
     //Function to generate the test list
-    public static String[] generateTestList(){
-        String[] generateList = new String[N];                                         // Makes a new string Array of size N
-        char[] generateChar = new char[k+1];                                           // Makes a char array of size k+1
+    public static String[] generateTestList(int N2, int k2){
+        String[] generateList = new String[N2];                                         // Makes a new string Array of size N
+        char[] generateChar = new char[k2+1];                                           // Makes a char array of size k+1
         Random rnd = new Random();
 
-        for(int i = 0; i < N; i++){
-            for(int j = 0; j < k; j++){
+        for(int i = 0; i < N2; i++){
+            for(int j = 0; j < k2; j++){
                 generateChar[j] = (char)(rnd.nextInt(maxV-minV) + minV);          // (char) converts to char with the Random function of type int for the char array
             }
-            generateChar[k] = '\0';                                                     // appends a null terminator to generateChar at position k in the array. (The end of the segment)
+            generateChar[k2] = '\0';                                                     // appends a null terminator to generateChar at position k in the array. (The end of the segment)
             generateList[i] = String.valueOf(generateChar);                             //puts the character segments into the string array at position i
         }
         return generateList;                                                            // returns the generated list to main function
@@ -36,7 +36,7 @@ public class Main {
         }
         System.out.println("\b\b\b }");                                                 // \b used to erase characters at the end I don't want printed out.
     }
-    public static String[] insertionSort(String data[]){                                // start of insertion sort.
+    public static String[] insertionSort(String data[], int N){                                // start of insertion sort.
         String temp;
 
         for(int i = 0; i < N; i++){                                                     //loops run until size N is reached
@@ -118,7 +118,7 @@ public class Main {
         return data;                                                                    // returns the sorted data array
     }
 
-    public static String[] radixSort(String[] data) {                                   // Start of radix sort referenced https://algs4.cs.princeton.edu/51radix/LSD.java.html
+    public static String[] radixSort(String[] data, int N) {                                   // Start of radix sort referenced https://algs4.cs.princeton.edu/51radix/LSD.java.html
         int R = 256;
         String[] aux = new String[N];
 
@@ -152,7 +152,7 @@ public class Main {
         System.out.println("Insertion sort");
         String[] tempList = testList.clone();
         print(testList);
-        sortedList = insertionSort(tempList);
+        sortedList = insertionSort(tempList, N);
         print(sortedList);
         System.out.println("Merge Sort");
         print(testList);
@@ -167,21 +167,9 @@ public class Main {
         System.out.println("RadixSort");
         print(testList);
         tempList = testList.clone();
-        sortedList = radixSort(tempList);
+        sortedList = radixSort(tempList, N);
         print(sortedList);
     }
-    public static void timePerformanceTesting(String[] testList){
-
-    }
-
-    public static void main(String[] args) {                                            // Start of main function
-        String[] testList = new String[N];
-        testList = generateTestList();
-        visualTesting(testList);
-        timePerformanceTesting(testList);
-    }
-
-
     /** Get CPU time in nanoseconds since the program(thread) started. */
     /** from: http://nadeausoftware.com/articles/2008/03/java_tip_how_get_cpu_and_user_time_benchmarking#TimingasinglethreadedtaskusingCPUsystemandusertime **/
     public static long getCpuTime( ) {
@@ -190,4 +178,57 @@ public class Main {
                 bean.getCurrentThreadCpuTime( ) : 0L;
 
     }
+    public static void timePerformanceTesting(){
+        String[] testList;
+        int changingN;
+        int changingK;
+        int changingD;
+        int iterations = 10;
+        long startTime = 0;
+        long endTime = 3000000000L;
+        long timingStart;
+        long timingEnd;
+        long totalTime;
+        long averageTime;
+        double prev ;
+
+        System.out.printf("Insertion Sort\n");
+        System.out.printf("| %5s| %10s| %15s| %10s| %15s| %10s| %15s| %10s| %15s|\n","","k=6","","k=12","","k=24","","k=48","");
+        System.out.printf("| %5s| %10s| %15s| %10s| %15s| %10s| %15s| %10s| %15s|\n","N","Time","Doubling Ratio","Time","Doubling Ratio","Time","Doubling Ratio","Time","Doubling Ratio");
+
+        for(changingN = 1; startTime < endTime; changingN = changingN *2){          // Timing for insertion Sort
+            System.out.printf("| %5d|",changingN);
+            prev=1;
+            startTime = getCpuTime();
+            for(changingK = 6; changingK < 49; changingK = changingK * 2) {
+                totalTime = 0;
+                for (int i = 0; i < iterations; i++) {
+                    testList = generateTestList(changingN, changingK);
+                    timingStart = getCpuTime();
+                    insertionSort(testList, changingN);
+                    timingEnd = getCpuTime();
+                    totalTime = timingEnd - timingStart;
+                }
+
+                averageTime = totalTime / iterations;
+
+                System.out.printf(" %10d|", averageTime);
+                System.out.printf(" %15.2f|", averageTime/prev);
+                prev = averageTime;
+
+            }
+            System.out.printf("\n");
+        }
+
+    }
+
+    public static void main(String[] args) {                                            // Start of main function
+        String[] testList = new String[N];
+        //testList = generateTestList(N,k);
+        //visualTesting(testList);
+        timePerformanceTesting();
+    }
+
+
+
 }
