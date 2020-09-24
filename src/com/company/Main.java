@@ -8,7 +8,7 @@ import java.util.Random;
 
 
 public class Main {
-    private static int N = 5;          //The length of list to be sorted
+    private static int N = 20;          //The length of list to be sorted
     private static int k = 4;          // The size of the key-values(strings) to sort
     //private static int d = 32;         // The size (in bytes or characters) of the digits used by the radix sort
     private static int minV = 97;      // smallest value for char
@@ -140,31 +140,45 @@ public class Main {
         }
          return data;
     }
+    public static boolean isSorted(String[] data){                                          // start of isSorted function
+        for (int i = 0; i < N-1; i++){
+            if(data[i].compareTo(data[i + 1]) > 0);                                     // compares the sorted String. if the value doesn't compare, it isn't sorted.
+            return false;
+        }
+        return true;
+    }
+    public static void visualTesting(String[] testList){
+        String[] sortedList = new String[N];
+        System.out.println("Insertion sort");
+        String[] tempList = testList.clone();
+        print(testList);
+        sortedList = insertionSort(tempList);
+        print(sortedList);
+        System.out.println("Merge Sort");
+        print(testList);
+        tempList = testList.clone();
+        sortedList = mergeSort(tempList, 0, N);
+        print(sortedList);
+        System.out.println("Quick Sort");
+        print(testList);
+        tempList = testList.clone();
+        sortedList = quickSort(tempList, 0, N);
+        print(sortedList);
+        System.out.println("RadixSort");
+        print(testList);
+        tempList = testList.clone();
+        sortedList = radixSort(tempList);
+        print(sortedList);
+    }
+    public static void timePerformanceTesting(String[] testList){
+
+    }
 
     public static void main(String[] args) {                                            // Start of main function
         String[] testList = new String[N];
-        String[] sortedList = new String[N];
-        System.out.println("Insertion sort");
         testList = generateTestList();
-        print(testList);
-        sortedList = insertionSort(testList);
-        print(sortedList);
-        System.out.println("Merge Sort");
-        testList = generateTestList();
-        print(testList);
-        sortedList = mergeSort(testList, 0, N);
-        print(sortedList);
-        System.out.println("Quick Sort");
-        testList = generateTestList();
-        print(testList);
-        sortedList = quickSort(testList, 0, N);
-        print(sortedList);
-        System.out.println("RadixSort");
-        testList = generateTestList();
-        print(testList);
-        sortedList = radixSort(testList);
-        print(sortedList);
-
+        visualTesting(testList);
+        timePerformanceTesting(testList);
     }
 
 
