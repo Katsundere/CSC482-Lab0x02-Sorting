@@ -10,7 +10,7 @@ import java.util.Random;
 public class Main {
     private static int N = 20;          //The length of list to be sorted
     private static int k = 4;          // The size of the key-values(strings) to sort
-    //private static int d = 32;         // The size (in bytes or characters) of the digits used by the radix sort
+    private static int d = 32;         // The size (in bytes or characters) of the digits used by the radix sort
     private static int minV = 97;      // smallest value for char
     private static int maxV = 122;     // Largest value for char
 
@@ -118,7 +118,7 @@ public class Main {
         return data;                                                                    // returns the sorted data array
     }
 
-    public static String[] radixSort(String[] data, int N) {                                   // Start of radix sort referenced https://algs4.cs.princeton.edu/51radix/LSD.java.html
+    public static String[] radixSort(String[] data, int d, int N) {                                   // Start of radix sort referenced https://algs4.cs.princeton.edu/51radix/LSD.java.html
         int R = 256;
         String[] aux = new String[N];
 
@@ -176,7 +176,7 @@ public class Main {
         System.out.println("RadixSort");
         print(testList);
         tempList = testList.clone();
-        sortedList = radixSort(tempList, N);
+        sortedList = radixSort(tempList, d, N);
         print(sortedList);
     }
     /** Get CPU time in nanoseconds since the program(thread) started. */
@@ -289,30 +289,31 @@ public class Main {
         System.out.printf("| %5s| %10s| %15s| %10s| %15s| %10s| %15s| %10s| %15s|\n","","k=6","","k=12","","k=24","","k=48","");
         System.out.printf("| %5s| %10s| %15s| %10s| %15s| %10s| %15s| %10s| %15s|\n","N","Time","Doubling Ratio","Time","Doubling Ratio","Time","Doubling Ratio","Time","Doubling Ratio");
         startTime = 0;
-        for(changingN = 1; startTime < endTime; changingN = changingN *2){          // Timing for insertion Sort
-            System.out.printf("| %5d|",changingN);
-            prev=1;
-            startTime = getCpuTime();
-            for(changingK = 6; changingK < 49; changingK = changingK * 2) {
-                totalTime = 0;
-                for (int i = 0; i < iterations; i++) {
-                    testList = generateTestList(changingN, changingK);
-                    timingStart = getCpuTime();
-                    radixSort(testList, changingN);
-                    timingEnd = getCpuTime();
-                    totalTime = timingEnd - timingStart;
+        for(changingD =1; startTime< endTime; changingD++) {
+            for (changingN = 1; startTime < endTime; changingN = changingN * 2) {          // Timing for insertion Sort
+                System.out.printf("| %5d|", changingN);
+                prev = 1;
+                startTime = getCpuTime();
+                for (changingK = 6; changingK < 49; changingK = changingK * 2) {
+                    totalTime = 0;
+                    for (int i = 0; i < iterations; i++) {
+                        testList = generateTestList(changingN, changingK);
+                        timingStart = getCpuTime();
+                        radixSort(testList, changingD, changingN);
+                        timingEnd = getCpuTime();
+                        totalTime = timingEnd - timingStart;
+                    }
+
+                    averageTime = totalTime / iterations;
+
+                    System.out.printf(" %10d|", averageTime);
+                    System.out.printf(" %15.2f|", averageTime / prev);
+                    prev = averageTime;
+
                 }
-
-                averageTime = totalTime / iterations;
-
-                System.out.printf(" %10d|", averageTime);
-                System.out.printf(" %15.2f|", averageTime/prev);
-                prev = averageTime;
-
+                System.out.printf("\n");
             }
-            System.out.printf("\n");
         }
-
     }
 
     public static void main(String[] args) {                                            // Start of main function
